@@ -27,7 +27,7 @@ then
 	renew=true
 	shift 1
 	>&2 echo "Killing container: [$ctName] ..."
-	docker kill $ctName
+	docker kill $ctName || true
 fi
 
 >&2 echo "List of existing images:"
@@ -48,4 +48,8 @@ then
 fi
 
 >&2 echo "Launching container: [$ctName] with image: [$image] and args: [$args] ..."
-docker run --rm -d --name=$ctName -p3000:3000 $image $args
+
+cmd="docker run --rm -d --name=$ctName -p3000:3000 $image $args"
+>&2 echo "$cmd"
+eval "$cmd"
+docker logs -f $ctName
