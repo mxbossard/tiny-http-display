@@ -4,11 +4,6 @@ MAINTAINER Maxime Bossard <mxbossard@pm.me>
 RUN apk add --update py3-setuptools
 RUN pip3 install --upgrade pip
 
-RUN apk add gcc
-RUN apk add musl-dev
-
-RUN pip install flask-restful
-
 ENV FLASK_APP app
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
@@ -19,11 +14,14 @@ RUN mkdir /home/flaskapp
 WORKDIR /home/flaskapp
 
 #COPY $PWD/flask_app /home/flaskapp
-COPY *.py /home/flaskapp/
-RUN pip3 install -r requirements.txt || true
-#CMD ["gunicorn","--bind","0.0.0.0:5000","wsgi:app"]
+COPY app/requirements.txt /home/flaskapp/
+RUN pip3 install -r requirements.txt
 
 ENV FLASK_ENV=development
+ENV TAO_API_KEY=
 
+#CMD ["gunicorn","--bind","0.0.0.0:5000","wsgi:app"]
 ENTRYPOINT ["python"]
-CMD ["server.py"]
+CMD ["app.py"]
+
+COPY app/* /home/flaskapp/
