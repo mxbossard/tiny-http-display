@@ -49,7 +49,7 @@ fi
 
 >&2 echo "Launching container: [$ctName] with image: [$image] and args: [$args] ..."
 
-cmd="docker run --rm -d --name=$ctName -p3000:5000 --env-file=.env $image $args"
+cmd="docker run --rm -d --network=influxdb --name=$ctName -p3000:5000 --env-file=.env $image $args"
 >&2 echo "$cmd"
 eval "$cmd"
 docker logs -f $ctName
