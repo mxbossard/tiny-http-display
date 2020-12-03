@@ -93,7 +93,7 @@ class TaoController(Resource):
         session = sessions.FuturesSession(max_workers=10)
         httpFutures = []
 
-        serviceRefAndStopIdArray = [('B', 1693), ('L', 286), ('L ret', 224)]
+        serviceRefAndStopIdArray = [('B', 1693, 'B'), ('L', 286, 'L all'), ('L', 224, 'L ret')]
         text = ''
         for serviceRefAndStopId in serviceRefAndStopIdArray:
             serviceRef = serviceRefAndStopId[0]
@@ -106,6 +106,7 @@ class TaoController(Resource):
             serviceRefAndStopId = serviceRefAndStopIdArray[i]
             serviceRef = serviceRefAndStopId[0]
             stopId = serviceRefAndStopId[1]
+            stopLabel = serviceRefAndStopId[2]
             httpResponse = future.result()
             resObj = json.loads(httpResponse.text)
             if len(resObj['busTimes']) > 0:
@@ -113,7 +114,7 @@ class TaoController(Resource):
             else:
                 response = None
 
-            text += '%s: ' % serviceRef
+            text += '%s: ' % (stopLabel if stopLabel else serviceRef)
             if response:
                 timeDatas = response['timeDatas']
                 for timeData in timeDatas:
